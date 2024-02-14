@@ -23,7 +23,7 @@ func New(db *gorm.DB) *Repository {
 	}
 }
 
-func (repo *Repository) InsertUser(user model.UserModel) error {
+func (repo *Repository) InsertUser(user *model.UserModel) error {
 	err := repo.DB.Table(tableUser).Create(user).Error
 	if err != nil {
 		log.Error("error insert user: " + err.Error())
