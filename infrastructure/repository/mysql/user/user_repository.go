@@ -1,7 +1,7 @@
 package user
 
 import (
-	"github.com/rs/zerolog/log"
+	"github.com/labstack/gommon/log"
 	"gorm.io/gorm"
 
 	model "pajarwp11/go-experiment/core/models/user"
