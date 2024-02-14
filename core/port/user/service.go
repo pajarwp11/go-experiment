@@ -6,5 +6,5 @@ import (
 )
 
 type ServiceContract interface {
-	RegisterUser(req *userModel.RegisterUser) (resp *model.DefaultResponse, err error)
+	RegisterUser(req *userModel.RegisterUser) *model.DefaultResponse
 }

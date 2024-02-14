@@ -1,7 +1,6 @@
 package user
 
 import (
-	"errors"
 	"time"
 
 	model "pajarwp11/go-experiment/core/models"
@@ -21,8 +20,9 @@ func New(repo port.RepoContract) *userService {
 	}
 }
 
-func (u *userService) RegisterUser(req *userModel.RegisterUser) (resp *model.DefaultResponse, err error) {
-	var userData *userModel.UserModel
+func (u *userService) RegisterUser(req *userModel.RegisterUser) *model.DefaultResponse {
+	userData := new(userModel.UserModel)
+	resp := new(model.DefaultResponse)
 	userData.Name = req.Name
 	userData.Email = req.Email
 	userData.Phone = req.Phone
@@ -32,7 +32,7 @@ func (u *userService) RegisterUser(req *userModel.RegisterUser) (resp *model.Def
 	if err != nil {
 		resp.Status.Code = "5000000"
 		resp.Status.Message = "register user error: error generate hash password"
-		return resp, errors.New(resp.Status.Message)
+		return resp
 	}
 
 	userData.Password = string(hashedPassword)
@@ -41,12 +41,12 @@ func (u *userService) RegisterUser(req *userModel.RegisterUser) (resp *model.Def
 	if err != nil {
 		resp.Status.Code = "5000001"
 		resp.Status.Message = "register user error:" + err.Error()
-		return resp, errors.New(resp.Status.Message)
+		return resp
 	}
 
 	resp.Data = userData
 	resp.Status.Code = "2010000"
 	resp.Status.Message = "user register success"
 
-	return resp, nil
+	return resp
 }
