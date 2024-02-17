@@ -9,14 +9,14 @@ import (
 )
 
 var (
-	DB *gorm.DB
+	MySQL *gorm.DB
 )
 
-func MysqlConnect(configName string) {
+func MysqlConnect() {
 	var err error
 	dsn := fmt.Sprintf(`%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local`, MySQLUser, MySQLPassword, MySQLHost, MySQLPort, MySQLDBName)
 
-	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	MySQL, err = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Error("failed connect mysql: " + err.Error())
 	}
