@@ -6,4 +6,5 @@ import (
 
 type RepoContract interface {
 	InsertUser(user *model.UserModel) error
+	GetUserList(params *model.UserListRequest) (list []model.UserListData, total int64, err error)
 }

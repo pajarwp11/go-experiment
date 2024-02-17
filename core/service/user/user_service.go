@@ -50,3 +50,20 @@ func (u *userService) RegisterUser(req *userModel.RegisterUser) *model.DefaultRe
 
 	return resp
 }
+
+func (u *userService) GetUserList(params *userModel.UserListRequest) (*model.DefaultResponse, int64) {
+	var err error
+	var list []userModel.UserListData
+	var total int64
+	resp := new(model.DefaultResponse)
+	list, total, err = u.repo.GetUserList(params)
+	if err != nil {
+		resp.Status.Code = "5000100"
+		resp.Status.Message = "get user list:" + err.Error()
+		return resp, total
+	}
+	resp.Data = list
+	resp.Status.Code = "2000100"
+	resp.Status.Message = "get user list success"
+	return resp, total
+}

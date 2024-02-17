@@ -5,6 +5,7 @@ import (
 	model "pajarwp11/go-experiment/core/models"
 	userModel "pajarwp11/go-experiment/core/models/user"
 	port "pajarwp11/go-experiment/core/port/user"
+	"pajarwp11/go-experiment/utils/meta"
 	"pajarwp11/go-experiment/utils/validator"
 	"strconv"
 
@@ -40,6 +41,41 @@ func (h *Handler) RegisterUser(c echo.Context) error {
 	}
 
 	res = h.svc.RegisterUser(req)
+
+	httpCode := res.Status.Code[0:3]
+	httpCodeInt, _ := strconv.Atoi(httpCode)
+	return c.JSON(httpCodeInt, res)
+}
+
+func (h *Handler) GetUserList(c echo.Context) error {
+	res := new(model.DefaultResponse)
+	req := new(userModel.UserListRequest)
+
+	if err := c.Bind(req); err != nil {
+		res.Status.Message = err.Error()
+		res.Status.Code = "4220100"
+		return c.JSON(http.StatusUnprocessableEntity, res)
+	}
+
+	errorValidation := validator.ValidateReq(req)
+	if errorValidation != nil {
+		res.Status.Message = "get user list validation error"
+		res.Status.Code = "4220101"
+		res.Errors = errorValidation
+		return c.JSON(http.StatusUnprocessableEntity, res)
+	}
+
+	if req.Limit <= 0 {
+		req.Limit = 10
+	}
+	if req.Page <= 0 {
+		req.Page = 1
+	}
+
+	res, total := h.svc.GetUserList(req)
+
+	from := (req.Page * req.Limit) - req.Limit
+	res.Meta = meta.CreateMeta(req.Page, req.Limit, from, int(total))
 
 	httpCode := res.Status.Code[0:3]
 	httpCodeInt, _ := strconv.Atoi(httpCode)

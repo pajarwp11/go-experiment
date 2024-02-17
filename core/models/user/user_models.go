@@ -19,3 +19,17 @@ type RegisterUser struct {
 	Phone    string `json:"phone" validate:"required"`
 	Password string `json:"password" validate:"required"`
 }
+
+type UserListRequest struct {
+	Limit int `query:"limit"  validate:"required"`
+	Page  int `query:"page"  validate:"required"`
+}
+
+type UserListData struct {
+	ID        int       `json:"id"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
+	Phone     string    `json:"phone"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}

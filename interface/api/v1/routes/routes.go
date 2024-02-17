@@ -30,5 +30,6 @@ func API(e *echo.Echo) {
 
 	gMerchant := v1.Group("/user")
 	gMerchant.POST("", userHandler.RegisterUser)
+	gMerchant.GET("/list", userHandler.GetUserList)
 
 }

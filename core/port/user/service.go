@@ -7,4 +7,5 @@ import (
 
 type ServiceContract interface {
 	RegisterUser(req *userModel.RegisterUser) *model.DefaultResponse
+	GetUserList(params *userModel.UserListRequest) (response *model.DefaultResponse, total int64)
 }
