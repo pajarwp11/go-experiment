@@ -33,3 +33,19 @@ type UserListData struct {
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
+
+type UpdateUser struct {
+	ID        int       `param:"id" json:"id" validate:"required"`
+	Name      string    `json:"name" validate:"required"`
+	Email     string    `json:"email" validate:"required"`
+	Phone     string    `json:"phone" validate:"required"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+type GetUserData struct {
+	ID int `param:"id" validate:"required"`
+}
+
+type DeleteUser struct {
+	ID int `param:"id" validate:"required"`
+}

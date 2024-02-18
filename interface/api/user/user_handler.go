@@ -81,3 +81,78 @@ func (h *Handler) GetUserList(c echo.Context) error {
 	httpCodeInt, _ := strconv.Atoi(httpCode)
 	return c.JSON(httpCodeInt, res)
 }
+
+func (h *Handler) GetUserData(c echo.Context) error {
+	res := new(model.DefaultResponse)
+	req := new(userModel.GetUserData)
+
+	if err := c.Bind(req); err != nil {
+		res.Status.Message = err.Error()
+		res.Status.Code = "4220200"
+		return c.JSON(http.StatusUnprocessableEntity, res)
+	}
+
+	errorValidation := validator.ValidateReq(req)
+	if errorValidation != nil {
+		res.Status.Message = "get user data validation error"
+		res.Status.Code = "4220201"
+		res.Errors = errorValidation
+		return c.JSON(http.StatusUnprocessableEntity, res)
+	}
+
+	res = h.svc.GetUserData(req.ID)
+
+	httpCode := res.Status.Code[0:3]
+	httpCodeInt, _ := strconv.Atoi(httpCode)
+	return c.JSON(httpCodeInt, res)
+}
+
+func (h *Handler) UpdateUser(c echo.Context) error {
+	res := new(model.DefaultResponse)
+	req := new(userModel.UpdateUser)
+
+	if err := c.Bind(req); err != nil {
+		res.Status.Message = err.Error()
+		res.Status.Code = "4220300"
+		return c.JSON(http.StatusUnprocessableEntity, res)
+	}
+
+	errorValidation := validator.ValidateReq(req)
+	if errorValidation != nil {
+		res.Status.Message = "update user validation error"
+		res.Status.Code = "4220301"
+		res.Errors = errorValidation
+		return c.JSON(http.StatusUnprocessableEntity, res)
+	}
+
+	res = h.svc.UpdateUser(req, req.ID)
+
+	httpCode := res.Status.Code[0:3]
+	httpCodeInt, _ := strconv.Atoi(httpCode)
+	return c.JSON(httpCodeInt, res)
+}
+
+func (h *Handler) DeleteUser(c echo.Context) error {
+	res := new(model.DefaultResponse)
+	req := new(userModel.GetUserData)
+
+	if err := c.Bind(req); err != nil {
+		res.Status.Message = err.Error()
+		res.Status.Code = "4220400"
+		return c.JSON(http.StatusUnprocessableEntity, res)
+	}
+
+	errorValidation := validator.ValidateReq(req)
+	if errorValidation != nil {
+		res.Status.Message = "delete user validation error"
+		res.Status.Code = "4220401"
+		res.Errors = errorValidation
+		return c.JSON(http.StatusUnprocessableEntity, res)
+	}
+
+	res = h.svc.DeleteUser(req.ID)
+
+	httpCode := res.Status.Code[0:3]
+	httpCodeInt, _ := strconv.Atoi(httpCode)
+	return c.JSON(httpCodeInt, res)
+}

@@ -64,3 +64,37 @@ func (repo *Repository) GetUserList(params *model.UserListRequest) (list []model
 
 	return
 }
+
+func (repo *Repository) GetUserByID(id int) (user model.UserListData, err error) {
+	result := repo.DB.
+		Select(`
+			id, 
+			name, 
+			email,
+			phone, 
+			created_at,
+			updated_at  
+		`).
+		Table(`user`).
+		Where("id=?", id).
+		First(&user)
+
+	return user, result.Error
+}
+
+func (repo *Repository) UpdateUser(params *model.UpdateUser, id int) error {
+	result := repo.DB.Table("user").Where("id=?", id).Updates(params)
+	if result.Error != nil {
+		return result.Error
+	}
+
+	if result.RowsAffected < 1 {
+		return errors.New("user id not exist")
+	}
+
+	return nil
+}
+
+func (repo *Repository) DeleteUser(id int) error {
+	return repo.DB.Table("user").Where("id=?", id).Delete(model.UserModel{}).Error
+}

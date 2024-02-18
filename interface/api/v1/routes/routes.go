@@ -28,8 +28,10 @@ func API(e *echo.Echo) {
 	// register routes v1
 	v1 := e.Group("/v1/api")
 
-	gMerchant := v1.Group("/user")
-	gMerchant.POST("", userHandler.RegisterUser)
-	gMerchant.GET("/list", userHandler.GetUserList)
-
+	gUser := v1.Group("/user")
+	gUser.POST("", userHandler.RegisterUser)
+	gUser.GET("/list", userHandler.GetUserList)
+	gUser.GET("/:id", userHandler.GetUserData)
+	gUser.PUT("/:id", userHandler.UpdateUser)
+	gUser.DELETE("/:id", userHandler.DeleteUser)
 }
