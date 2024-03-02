@@ -18,7 +18,7 @@ type GetItemData struct {
 }
 
 type UpdateItem struct {
-	ID       int    `param:"id" json:"id" validate:"required"`
+	ID       string `param:"id" json:"id" validate:"required"`
 	Name     string `json:"name" bson:"name" validate:"required"`
 	Quantity int    `json:"quantity" bson:"quantity" validate:"required"`
 	Weight   int    `json:"weight" bson:"weight" validate:"required"`

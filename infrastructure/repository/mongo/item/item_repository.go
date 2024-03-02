@@ -7,6 +7,7 @@ import (
 
 	"github.com/labstack/gommon/log"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -27,8 +28,12 @@ func New(db *mongo.Database) *Repository {
 }
 
 func (repo *Repository) GetItemByID(id string) (doc model.Item, err error) {
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		log.Error("error get item: " + err.Error())
+	}
 	filter := bson.M{
-		"_id": id,
+		"_id": objectID,
 	}
 
 	err = repo.DB.Collection(collectionItem).FindOne(context.TODO(), filter).Decode(&doc)
@@ -47,8 +52,12 @@ func (repo *Repository) InsertItem(itemData *model.InsertItem) error {
 }
 
 func (repo *Repository) UpdateItem(itemData *model.UpdateItem) error {
+	objectID, err := primitive.ObjectIDFromHex(itemData.ID)
+	if err != nil {
+		log.Error("error update item: " + err.Error())
+	}
 	where := bson.M{
-		"_id": itemData.ID,
+		"_id": objectID,
 	}
 
 	update := bson.M{"$set": bson.M{
@@ -57,7 +66,7 @@ func (repo *Repository) UpdateItem(itemData *model.UpdateItem) error {
 		"weight":   itemData.Weight,
 	}}
 
-	_, err := repo.DB.Collection(collectionItem).UpdateOne(context.TODO(), where, update)
+	_, err = repo.DB.Collection(collectionItem).UpdateOne(context.TODO(), where, update)
 	if err != nil {
 		log.Error("error update item: " + err.Error())
 	}
@@ -65,7 +74,14 @@ func (repo *Repository) UpdateItem(itemData *model.UpdateItem) error {
 }
 
 func (repo *Repository) DeleteItem(id string) error {
-	_, err := repo.DB.Collection(collectionItem).DeleteOne(context.TODO(), id)
+	objectID, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		log.Error("error delete item: " + err.Error())
+	}
+	filter := bson.M{
+		"_id": objectID,
+	}
+	_, err = repo.DB.Collection(collectionItem).DeleteOne(context.TODO(), filter)
 	if err != nil {
 		log.Error("error delete item: " + err.Error())
 	}
