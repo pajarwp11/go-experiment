@@ -48,9 +48,9 @@ func (i *itemService) GetItemData(id string) *model.DefaultResponse {
 	return resp
 }
 
-func (i *itemService) UpdateItem(params *itemModel.InsertItem, id string) *model.DefaultResponse {
+func (i *itemService) UpdateItem(params *itemModel.UpdateItem) *model.DefaultResponse {
 	resp := new(model.DefaultResponse)
-	err := i.repo.UpdateItem(id, params)
+	err := i.repo.UpdateItem(params)
 	if err != nil {
 		resp.Status.Code = "5000700"
 		resp.Status.Message = "update item error:" + err.Error()

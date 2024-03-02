@@ -46,9 +46,9 @@ func (repo *Repository) InsertItem(itemData *model.InsertItem) error {
 	return err
 }
 
-func (repo *Repository) UpdateItem(id string, itemData *model.InsertItem) error {
+func (repo *Repository) UpdateItem(itemData *model.UpdateItem) error {
 	where := bson.M{
-		"_id": id,
+		"_id": itemData.ID,
 	}
 
 	update := bson.M{"$set": bson.M{
