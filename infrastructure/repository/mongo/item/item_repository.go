@@ -38,7 +38,7 @@ func (repo *Repository) GetItemByID(id string) (doc model.Item, err error) {
 	return
 }
 
-func (repo *Repository) InsertItem(itemData model.InsertItem) error {
+func (repo *Repository) InsertItem(itemData *model.InsertItem) error {
 	_, err := repo.DB.Collection(collectionItem).InsertOne(context.TODO(), itemData)
 	if err != nil {
 		log.Error("error insert item: " + err.Error())
@@ -46,7 +46,7 @@ func (repo *Repository) InsertItem(itemData model.InsertItem) error {
 	return err
 }
 
-func (repo *Repository) UpdateItem(id string, itemData model.InsertItem) error {
+func (repo *Repository) UpdateItem(id string, itemData *model.InsertItem) error {
 	where := bson.M{
 		"_id": id,
 	}
