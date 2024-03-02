@@ -17,6 +17,7 @@ import (
 func main() {
 	config.LoadEnvVars()
 	config.MysqlConnect()
+	config.ConnectMongoDB()
 	AppStart()
 }
 
